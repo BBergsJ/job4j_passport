@@ -7,13 +7,11 @@ import ru.job4j.repository.PassportRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class PassportService {
 
-    private PassportRepository passportRepository;
+    private final PassportRepository passportRepository;
 
     public PassportService(PassportRepository passportRepository) {
         this.passportRepository = passportRepository;
@@ -33,12 +31,10 @@ public class PassportService {
     }
 
     public List<Passport> findAll() {
-        return StreamSupport
-                .stream(this.passportRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
+        return (List<Passport>) passportRepository.findAll();
     }
 
-    public Optional<Passport> findBySerial(int serial) {
+    public List<Passport> findBySerial(int serial) {
         return passportRepository.findBySerial(serial);
     }
 
@@ -54,5 +50,9 @@ public class PassportService {
     public List<Passport> findForReplace() {
         LocalDateTime localDateTime = LocalDateTime.now().plusMonths(3);
         return passportRepository.findAllByExpirationDateBetween(LocalDateTime.now(), localDateTime);
+    }
+
+    public Optional<Passport> findBySerialAndNumber(int serial, int number) {
+        return passportRepository.findBySerialAndNumber(serial, number);
     }
 }

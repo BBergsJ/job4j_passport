@@ -32,6 +32,11 @@ public class PassportController {
 
     @PostMapping("/save")
     public ResponseEntity<Passport> create(@RequestBody Passport passport) {
+        Optional<Passport> rsl = passportService
+                .findBySerialAndNumber(passport.getSerial(), passport.getNumber());
+        if (rsl.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Passport already exists");
+        }
         return new ResponseEntity<>(
                 this.passportService.save(passport),
                 HttpStatus.CREATED
@@ -41,7 +46,7 @@ public class PassportController {
     @PutMapping("/update")
     public ResponseEntity<Passport> update(@RequestParam int id, @RequestBody Passport passport) {
         var rsl = passportService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Passport not found."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Passport not found."));
         rsl.setSerial(passport.getSerial());
         rsl.setNumber(passport.getNumber());
         rsl.setFio(passport.getFio());
@@ -68,11 +73,10 @@ public class PassportController {
                     HttpStatus.OK
             );
         } else {
-            var rsl = passportService.findBySerial(Integer.parseInt(serial))
-                    .orElseThrow(() -> new IllegalArgumentException("Serial not found"));
+            List<Passport> rsl = passportService.findBySerial(Integer.parseInt(serial));
             return new ResponseEntity<>(
-                    List.of(rsl),
-                    HttpStatus.OK
+                    rsl,
+                    rsl.size() > 0 ? HttpStatus.OK : HttpStatus.NOT_FOUND
             );
         }
     }

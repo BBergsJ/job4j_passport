@@ -10,7 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface PassportRepository extends CrudRepository<Passport, Integer> {
-    Optional<Passport> findBySerial(int serial);
+    List<Passport> findBySerial(int serial);
     List<Passport> findAllByExpirationDateBefore(LocalDateTime localDateTime);
     List<Passport> findAllByExpirationDateBetween(LocalDateTime starts, LocalDateTime ends);
+    Optional<Passport> findBySerialAndNumber(int serial, int number);
 }
