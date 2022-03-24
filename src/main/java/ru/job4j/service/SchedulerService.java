@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.job4j.domain.Passport;
+
+import java.util.List;
 
 @Component
 public class SchedulerService {
@@ -11,7 +14,7 @@ public class SchedulerService {
     private final KafkaTemplate<Integer, String> template;
     private final PassportService passportService;
 
-    @Value("spring.kafka.default-topic")
+    @Value("${spring.kafka.default-topic}")
     private String topic;
 
     public SchedulerService(KafkaTemplate<Integer, String> template,
