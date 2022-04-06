@@ -16,3 +16,19 @@
 - Spring (ORM, Data)
 - PostgreSQL, Hibernate, JDBC
 - Maven, Tomcat
+
+**Как запустить приложение через docker-compose:**
+==
+- Собрать образ приложения:
+```
+docker build -t password .
+```
+
+- Запустить скрипт docker-compose:
+```
+docker-compose up
+```
+
+- Запустить приложение:
+
+Для проверки работы приложения можно воспользоваться Postman, url по умолчанию - http://127.0.0.1:8080
