@@ -32,3 +32,35 @@ docker-compose up
 - Запустить приложение:
 
 Для проверки работы приложения можно воспользоваться Postman, url по умолчанию - http://127.0.0.1:8080
+
+**Как запустить приложение в Kubernetes:**
+==
+
+- Предварительная установка:
+  для запуска приложения в Kubernetes необходимо предварительно установить: git, docker, kubectl и minikube
+
+- Настройка Kubernetes и развертывание:
+    + Перейти в директорию job4j_passport/k8s. Выполняем команду ниже. Она создает secret из указанного файла:
+      ```
+      kubectl apply -f postgresdb-secret.yml
+      ```
+    + Вносим ConfigMap в кластер:
+      ```
+      kubectl apply -f postgresdb-configmap.yml
+      ```
+    + Запускаем создание развертывания для Postgres:
+      ```
+      kubectl apply -f postgresdb-deployment.yml
+      ```
+    + Запускаем создание развертывания для Spring Boot приложения:
+      ```
+      kubectl apply -f spring-deployment.yml
+      ```
+    + Далее набираем команду ниже. Команда service возвращает нам URL, по которому мы можем подключиться к сервису из вне:
+      ```
+      minikube service spring-boot-service
+      ```
+
+- Запустить приложение:
+
+Для проверки работы приложения можно воспользоваться Postman, url по умолчанию - http://192.168.49.2:32100.
